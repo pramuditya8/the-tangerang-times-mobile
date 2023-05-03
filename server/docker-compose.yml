@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  app-service:
+    build: ./services/app
+    container_name: app-service
+    ports:
+      - 4002:4002
+    environment:
+      NODE_ENV: production
+      PORT: 4002
+      DATABASE_URL: ${DATABASE_URL}
+  users-service:
+    build: ./services/users
+    container_name: users-service
+    ports:
+      - 4001:4001
+    environment:
+      NODE_ENV: production
+      PORT: 4001
+      MONGO_CONNECTION: ${MONGO_CONNECTION}
+      DATABASE_NAME: ${DATABASE_NAME}
+  orchestrator:
+    build: ./orchestrator
+    container_name: orchestrator
+    ports:
+      - 80:80
+    environment:
+      PORT: 80
+      REDIS_URL: ${REDIS_URL}
+      APP_SERVICE_URL: ${APP_SERVICE_URL}
+      USERS_SERVICE_URL: ${USERS_SERVICE_URL}
